@@ -1,12 +1,20 @@
 // main.js
-const { getRoundTripData, getTripData, bestPrices } = require('./func/scrapper'); // Ajuste o caminho do arquivo conforme necessário
-
+const { getRoundTripData, getTripData, bestPrices } = require('./func/skyscanner'); // Ajuste o caminho do arquivo conforme necessário
+const { getData } = require('./func/googleflights'); // Ajuste o caminho do arquivo conforme necessário
 const pais = 'BR'
-const origem = 'REC';
-const destino = 'MAO';
-const dataIda = '240106';
-const dataVolta = '240122';
 
-//getRoundTripData(origem, destino, dataIda, dataVolta).catch(err => console.error(err));
-//getTripData(origem, destino, dataIda).catch(err => console.error(err));
-bestPrices(origem, dataIda, pais).catch(err => console.error(err));
+const origens = ['NAT', 'FOR', 'REC', 'CNF', 'GRU', 'SSA', 'JPA', 'MCZ','BEL', 'CWB', 'GIG'];
+const destino = 'RUH';
+
+async function buscarVoos() {
+  for (const origem of origens) {
+    console.log(`Buscando voos de ${origem} para ${destino}`);
+    try {
+      await getData(origem, destino);
+    } catch (err) {
+      console.error(err);
+    }
+  }
+}
+
+buscarVoos();
