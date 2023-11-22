@@ -77,6 +77,21 @@ function findCheapestRoundTrip(flightDetails) {
     };
   }
 
+  async function tryClick(page, selector, maxAttempts = 3) {
+    for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+        try {
+            await page.waitForSelector(selector, { visible: true });
+            await page.click(selector);
+            return; // Se o clique for bem-sucedido, saia da função
+        } catch (error) {
+            console.log(`Tentativa ${attempt} falhou. Tentando novamente...`);
+            if (attempt === maxAttempts) {
+                throw error; // Se atingir o número máximo de tentativas, lance o erro
+            }
+        }
+    }
+}
+
 
   
 async function getData(origem, destino) {
@@ -90,24 +105,28 @@ async function getData(origem, destino) {
       await page.goto(url, { waitUntil: 'networkidle2' });
     
    // Espera até que o elemento com role="combobox" esteja visível
-const comboboxSelector = '[role="combobox"]';
-await page.waitForSelector(comboboxSelector);
+//const comboboxSelector = '[role="combobox"]';
+//await page.waitForSelector(comboboxSelector);
+
+
+await tryClick(page, '[role="combobox"]');
 
 // Clica no combobox
-await page.click(comboboxSelector);
+//await page.click(comboboxSelector);
 
 // Espera até que o elemento li com data-value="2" esteja visível
-const liSelector = 'li[data-value="2"]';
-await page.waitForSelector(liSelector);
+//const liSelector = 'li[data-value="2"]';
+//await page.waitForSelector(liSelector);
+await page.waitForTimeout(500);
+await tryClick(page, 'li[data-value="2"]');
 
 // Clica no elemento li
-await page.click(liSelector);
+//await page.click(liSelector);
 
 
 // Aguarda um momento para a ação de clique ser processada
 await page.waitForTimeout(1000);
-  // Localizar o elemento de entrada pelo valor 'Aracati'
-  const inputSelector = 'input[type="text"][value="Aracati"]';
+  const inputSelector = 'input[type="text"][value="Mossoró"]';
   await page.waitForSelector(inputSelector);
 
   // Clique no input para interagir com ele
@@ -117,17 +136,13 @@ await page.waitForTimeout(1000);
   await page.keyboard.down('Control');
   await page.keyboard.press('A'); // Pode precisar ser 'a' em sistemas macOS
   await page.keyboard.up('Control');
-    console.log('Iniciando bot.');
-    await page.waitForTimeout(200);
-    console.log("\x1b[32m", 'Bot configurado.');  // Cyan
+
     await page.waitForTimeout(500);
     console.log("\x1b[1m", `Pesquisando ${origem} até ${destino}`); // Yellow
-  // Digitar 'REC' para substituir o texto selecionado
   await page.keyboard.type(origem);
   await page.waitForTimeout(500);
 
   await page.keyboard.press('Enter');
-  //console.log("\x1b[32m", 'Lista de preços de dezembro obtida ✅'); // Yellow
 
   // Pressionar Tab duas vezes
   await page.keyboard.press('Tab');
@@ -139,7 +154,6 @@ await page.waitForTimeout(1000);
   await page.waitForTimeout(500);
   await page.keyboard.type('14/12/2023');
   await page.waitForTimeout(2000);
-  //console.log("\x1b[32m", 'Lista de preços de janeiro obtida ✅'); // Yellow
 
   await page.keyboard.press('Enter');
   await page.keyboard.press('Tab');
@@ -156,15 +170,21 @@ await page.waitForSelector(nextButtonSelector);
 //   await page.keyboard.press('Tab');
 //   await page.keyboard.press('Tab');
 //   await page.keyboard.press('Enter');
+const timeWait = 3000;
   await page.click(nextButtonSelector);
-  await page.waitForTimeout(6000);// Função para executar a busca de dados
+  await page.waitForTimeout(timeWait);// Função para executar a busca de dados
   await page.click(nextButtonSelector);
-  await page.waitForTimeout(6000);// Função para executar a busca de dados
+  await page.waitForTimeout(timeWait);// Função para executar a busca de dados
   await page.click(nextButtonSelector);
-  await page.waitForTimeout(6000);// Função para executar a busca de dados
+  await page.waitForTimeout(timeWait);// Função para executar a busca de dados
   await page.click(nextButtonSelector);
-  await page.waitForTimeout(6000);// Função para executar a busca de dados
-// Captura o conteúdo de todas as divs preenchidas com role="button" e tabindex="-1" dentro de divs com role="rowgroup"
+  await page.waitForTimeout(timeWait);// Função para executar a busca de dados
+  await page.click(nextButtonSelector);
+  await page.waitForTimeout(timeWait);// Função para executar a busca de dados
+  await page.click(nextButtonSelector);
+  await page.waitForTimeout(timeWait);// Função para executar a busca de dados
+
+  // Captura o conteúdo de todas as divs preenchidas com role="button" e tabindex="-1" dentro de divs com role="rowgroup"
 const flightDetails = await page.evaluate(() => {
     const details = [];
     // Seleciona todas as divs com role="rowgroup"
@@ -208,10 +228,91 @@ const flightDetails = await page.evaluate(() => {
    // console.log('Detalhes dos voos:', flightDetails);
   await browser.close();
 }
-  
 
+
+function parseTravelInfo(text) {
+  const lines = text.split('\n');
+  const travelInfo = [];
+  let current = {};
+
+  // Lista de palavras a serem ignoradas
+  const ignoreWords = ["About these results", "About", "Privacy", "Terms", "Join user studies", "Feedback", "Help Center"];
+
+  for (let i = 0; i < lines.length; i++) {
+      // Verifica se a linha atual contém alguma palavra da lista de ignorados
+      if (ignoreWords.some(word => lines[i].includes(word))) {
+          continue; // Pula para a próxima iteração do loop se a linha contém uma palavra ignorada
+      }
+
+      if (i % 6 === 0) {
+          if (current.destination) travelInfo.push(current);
+          current = { destination: lines[i] };
+      } else if (i % 6 === 1) {
+          current.date = lines[i];
+      } else if (i % 6 === 2) {
+          current.initialPrice = lines[i];
+      } else if (i % 6 === 3) {
+          current.flightDetails = lines[i];
+      } else if (i % 6 === 4) {
+          current.duration = lines[i];
+      } else if (i % 6 === 5) {
+          current.finalPrice = lines[i];
+      }
+  }
+
+  if (current.destination) travelInfo.push(current);
+
+  return travelInfo;
+}
+async function searchBestDeparture() {
+  let browser;
+  try {
+      browser = await puppeteer.launch({ headless: false });
+      const page = await browser.newPage();
+      const url = 'https://www.google.com/travel/explore';
+
+      await page.goto(url, { waitUntil: 'networkidle2' });
+
+      // Localizar o elemento de entrada pelo valor 'Aracati'
+      const inputSelector = 'input[type="text"][value="Mossoro"]';
+      await page.waitForSelector(inputSelector);
+
+      // Clique no input para interagir com ele
+      await page.click(inputSelector);
+
+      // Simular CTRL+A para selecionar todo o texto
+      await page.keyboard.down('Control');
+      await page.keyboard.press('A'); // Pode precisar ser 'a' em sistemas macOS
+      await page.keyboard.up('Control');
+
+      // Digitar 'REC' para substituir o texto selecionado
+      await page.keyboard.type('REC');
+      await page.waitForTimeout(1000);
+
+      await page.keyboard.press('Enter');
+
+      // Aguardar a atualização dos resultados
+      await page.waitForTimeout(3000);
+
+      // Listar todo o conteúdo da <main> com classe 'Dy1Pdc rcycge'
+      const content = await page.evaluate(() => {
+          const mainDiv = document.querySelector('main.Dy1Pdc.rcycge');
+          return mainDiv ? mainDiv.innerText : 'Nenhum conteúdo encontrado';
+      });
+
+      const travelData = parseTravelInfo(content);
+      console.log(travelData);
+
+  } catch (error) {
+      console.error('Erro encontrado:', error);
+  } finally {
+      if (browser) {
+          await browser.close();
+      }
+  }
+}
   
-module.exports = { getData };
+module.exports = { getData, searchBestDeparture };
 
 
 
