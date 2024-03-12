@@ -3,27 +3,51 @@ const { getRoundTripData, getTripData, bestPrices } = require('./func/skyscanner
 const { getData, searchBestDeparture } = require('./func/googleflights'); // Ajuste o caminho do arquivo conforme necessário
 const pais = 'BR'
 
-//const origens = ['GIG', 'BEL', 'SSA'];
-//const origens = ['LPB', 'VVI', 'LIM']
-const origens = ['NAT', 'FOR', 'REC', 'CNF', 'GRU','GIG', 'SDU', 'JPA', 'BSB','BEL', 'CWB', 'MCZ', 'SSA', 'PVH'];
-//const origens = ['SSA'];
-
-//
-//const destinos = ['NAT', 'FOR','JPA','REC']
-//const origens = ['NAT']
+const origens = ['LPB', 'VVI', 'LIM']
+//const origens = ['NAT', 'FOR', 'REC', 'CNF', 'GRU','GIG', 'SDU', 'JPA', 'BSB','BEL', 'CWB', 'MCZ', 'SSA', 'PVH'];
 const destino = 'CNF';
-//const origens = ['LPB', 'VVI', 'LIM']W
 
 async function buscarVoos() {
   for (const origem of origens) {
     console.log(`Buscando voos de ${origem} para ${destino}`);
     try {
-      await getData(origem, destino);
+      const flightDetails = await getData(origem, destino);
+
+      // Certifique-se de que flightDetails contém itens
+      if (flightDetails.length === 0) {
+        console.log(`Nenhum detalhe do voo encontrado de ${origem} para ${destino}.`);
+        continue; // Vá para a próxima iteração do loop
+      }
+
+      // Encontrar o preço mais baixo entre os voos
+      const prices = flightDetails.map(flight => flight.price);
+      const lowestPrice = Math.min(...prices);
+
+      // Verifique se o menor preço é um número válido
+      if (!isFinite(lowestPrice)) {
+        console.log(`Não foi possível determinar o preço mais baixo de ${origem} para ${destino}.`);
+        continue;
+      }
+
+      // Filtrar todos os voos com o preço mais baixo
+      const cheapestFlights = flightDetails.filter(flight => flight.price === lowestPrice);
+
+      // Adicionar colunas de origem e destino a cada objeto de voo
+      const flightsWithOriginAndDestination = cheapestFlights.map(flight => ({
+        origem,
+        destino,
+        ...flight
+      }));
+
+      console.log(`Melhores voos de ${origem} para ${destino}:`);
+      console.table(flightsWithOriginAndDestination); // Exibe uma tabela para cada voo
+
     } catch (err) {
-      console.error(err);
+      console.error(`Erro ao buscar voos de ${origem} para ${destino}:`, err);
     }
   }
 }
+
 
 
 async function buscarVoosMultiple() {

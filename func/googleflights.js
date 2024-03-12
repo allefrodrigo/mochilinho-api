@@ -95,28 +95,24 @@ function findCheapestRoundTrip(flightDetails) {
 
   
 async function getData(origem, destino) {
-    const browser = await puppeteer.launch({
-        headless: false, // Abre o navegador em modo não headless para interação manual
-      });
+  let browser;
+  try {
+    browser = await puppeteer.launch({
+      headless: false, // Abre o navegador em modo não headless para interação manual
+    });
     
-      const page = await browser.newPage();
-      const url = 'https://www.google.com/travel/flights';
-    
-      await page.goto(url, { waitUntil: 'networkidle2' });
-    
+    const page = await browser.newPage();
+    const url = 'https://www.google.com/travel/flights';
+    await page.goto(url, { waitUntil: 'networkidle2' });
 
-await tryClick(page, '[role="combobox"]');
+    await tryClick(page, '[role="combobox"]');
+    await page.waitForTimeout(500);
+    await tryClick(page, 'li[data-value="2"]');
 
-//await page.waitForSelector(liSelector);
-await page.waitForTimeout(500);
-await tryClick(page, 'li[data-value="2"]');
-
-
-await page.waitForTimeout(1000);
-  const inputSelector = 'input[type="text"][value="Aracati"]';
-  await page.waitForSelector(inputSelector);
-
-  // Clique no input para interagir com ele
+    await page.waitForTimeout(1000);
+    const inputSelector = 'input[type="text"][value="Porto Velho"]';
+    await page.waitForSelector(inputSelector);
+    // Clique no input para interagir com ele
   await page.click(inputSelector);
 
   // Simular CTRL+A para selecionar todo o texto
@@ -141,79 +137,68 @@ await page.waitForTimeout(1000);
   await page.keyboard.press('Enter');
   await page.keyboard.press('Tab');
   await page.waitForTimeout(1000);
-  await page.keyboard.type('21/12/2023');
+  await page.keyboard.type('20/03/2024');
   await page.waitForTimeout(1000);
   await page.keyboard.press('Enter');
   await page.keyboard.press('Tab');
 
+    const nextButtonSelector = 'button[aria-label="Next"]';
+    await page.waitForSelector(nextButtonSelector);
+    await page.click(nextButtonSelector);
+    await page.waitForTimeout(timeWait);
 
-  // Pressiona Enter para ativar a seleção
-await page.keyboard.press('Enter');
+    const backButtonSelector = 'button[aria-label="Previous"]';
+    await page.waitForSelector(backButtonSelector);
+    await page.click(backButtonSelector);
+    await page.waitForTimeout(timeWait);
 
-// Localiza o botão com o aria-label "Next"
-const nextButtonSelector = 'button[aria-label="Next"]';
-await page.waitForSelector(nextButtonSelector);
-await page.click(nextButtonSelector);
-await page.waitForTimeout(timeWait);// Função para executar a busca de dados
+    for (let i = 0; i < 5; i++) {
+      await page.click(nextButtonSelector);
+      await page.waitForTimeout(timeWait);
+    }
 
-const backButtonSelector = 'button[aria-label="Previous"]';
-await page.waitForSelector(backButtonSelector);
-await page.click(backButtonSelector);
-await page.waitForTimeout(timeWait);// Função para executar a busca de dados
-
-
-for (let i = 0; i < 9; i++) {
-  await page.click(nextButtonSelector);
-
-    await page.waitForTimeout(timeWait);// Função para executar a busca de dados
-}
-
-
-  
-  // Captura o conteúdo de todas as divs preenchidas com role="button" e tabindex="-1" dentro de divs com role="rowgroup"
-const flightDetails = await page.evaluate(() => {
-    const details = [];
-    // Seleciona todas as divs com role="rowgroup"
-    const rowGroups = Array.from(document.querySelectorAll('div[role="rowgroup"]'));
-    
-    rowGroups.forEach(group => {
-      const buttons = Array.from(group.querySelectorAll('div[role="button"][tabindex="-1"]'));
-      buttons.forEach(btn => {
-        const dateDiv = btn.querySelector('div[jsname="nEWxA"]');
-        const priceDiv = btn.querySelector('div[jsname="qCDwBb"]');
-        
-        // Verifica se ambos os elementos existem e se o priceDiv está preenchido
-        if (dateDiv && priceDiv && priceDiv.textContent.trim() !== '') {
-          const dateLabel = dateDiv.getAttribute('aria-label');
-          const dateContent = dateDiv.textContent.trim();
-          const priceLabel = priceDiv.getAttribute('aria-label');
-          const priceContent = priceDiv.textContent.trim();
+    const flightDetails = await page.evaluate(() => {
+      const details = [];
+      const rowGroups = Array.from(document.querySelectorAll('div[role="rowgroup"]'));
+      
+      rowGroups.forEach(group => {
+        const buttons = Array.from(group.querySelectorAll('div[role="button"][tabindex="-1"]'));
+        buttons.forEach(btn => {
+          const dateDiv = btn.querySelector('div[jsname="nEWxA"]');
+          const priceDiv = btn.querySelector('div[jsname="qCDwBb"]');
           
-          // Salva as informações em um objeto
-          details.push({
-            dateLabel,
-            dateContent,
-            priceLabel,
-            priceContent
-          });
-        }
+          if (dateDiv && priceDiv && priceDiv.textContent.trim() !== '') {
+            const dateLabel = dateDiv.getAttribute('aria-label');
+            const dateContent = dateDiv.textContent.trim();
+            const priceLabel = priceDiv.getAttribute('aria-label');
+            const priceContent = priceDiv.textContent.trim();
+            
+            const priceValue = Number(priceContent.replace(/[^\d]/g, ''));
+        
+            details.push({
+              dateLabel,
+              // dateContent,
+              // priceLabel,
+              //priceContent,
+              price: priceValue  
+            });
+          }
+        });
       });
+      return details;
     });
-  
-    return details;
-  });
 
-  
-  // Suponha que `flightDetails` seja o seu array de objetos com os detalhes dos voos
-  const { cheapestDeparture, cheapestReturns } = findCheapestRoundTrip(flightDetails);
-  
-  console.log(cheapestDeparture);
- // console.log('Opções de volta mais baratas:');
- // cheapestReturns.forEach(flight => console.log(flight));
-  
-   // console.log('Detalhes dos voos:', flightDetails);
-  await browser.close();
+    return flightDetails; // Retorna os detalhes para serem usados posteriormente
+  } catch (error) {
+    console.error('Erro encontrado:', error);
+    throw error; // Relança o erro para que possa ser tratado ou registrado por um manipulador de erro superior.
+  } finally {
+    if (browser) {
+      await browser.close(); // Garante que o navegador seja fechado
+    }
+  }
 }
+
 
 
 function parseTravelInfo(text) {
