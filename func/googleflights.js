@@ -104,29 +104,16 @@ async function getData(origem, destino) {
     
       await page.goto(url, { waitUntil: 'networkidle2' });
     
-   // Espera até que o elemento com role="combobox" esteja visível
-//const comboboxSelector = '[role="combobox"]';
-//await page.waitForSelector(comboboxSelector);
-
 
 await tryClick(page, '[role="combobox"]');
 
-// Clica no combobox
-//await page.click(comboboxSelector);
-
-// Espera até que o elemento li com data-value="2" esteja visível
-//const liSelector = 'li[data-value="2"]';
 //await page.waitForSelector(liSelector);
 await page.waitForTimeout(500);
 await tryClick(page, 'li[data-value="2"]');
 
-// Clica no elemento li
-//await page.click(liSelector);
 
-
-// Aguarda um momento para a ação de clique ser processada
 await page.waitForTimeout(1000);
-  const inputSelector = 'input[type="text"][value="Mossoró"]';
+  const inputSelector = 'input[type="text"][value="Aracati"]';
   await page.waitForSelector(inputSelector);
 
   // Clique no input para interagir com ele
@@ -147,43 +134,42 @@ await page.waitForTimeout(1000);
   // Pressionar Tab duas vezes
   await page.keyboard.press('Tab');
   // Aguarde um momento para que a digitação seja concluída
+  const timeWait = 3000;
+
   await page.keyboard.type(destino);
   await page.waitForTimeout(500);
   await page.keyboard.press('Enter');
   await page.keyboard.press('Tab');
-  await page.waitForTimeout(500);
-  await page.keyboard.type('14/12/2023');
-  await page.waitForTimeout(2000);
-
+  await page.waitForTimeout(1000);
+  await page.keyboard.type('21/12/2023');
+  await page.waitForTimeout(1000);
   await page.keyboard.press('Enter');
   await page.keyboard.press('Tab');
 
-  await page.waitForTimeout(1000);
 
   // Pressiona Enter para ativar a seleção
 await page.keyboard.press('Enter');
+
 // Localiza o botão com o aria-label "Next"
 const nextButtonSelector = 'button[aria-label="Next"]';
 await page.waitForSelector(nextButtonSelector);
+await page.click(nextButtonSelector);
+await page.waitForTimeout(timeWait);// Função para executar a busca de dados
 
-// Clica no botão "Next"
-//   await page.keyboard.press('Tab');
-//   await page.keyboard.press('Tab');
-//   await page.keyboard.press('Enter');
-const timeWait = 3000;
-  await page.click(nextButtonSelector);
-  await page.waitForTimeout(timeWait);// Função para executar a busca de dados
-  await page.click(nextButtonSelector);
-  await page.waitForTimeout(timeWait);// Função para executar a busca de dados
-  await page.click(nextButtonSelector);
-  await page.waitForTimeout(timeWait);// Função para executar a busca de dados
-  await page.click(nextButtonSelector);
-  await page.waitForTimeout(timeWait);// Função para executar a busca de dados
-  await page.click(nextButtonSelector);
-  await page.waitForTimeout(timeWait);// Função para executar a busca de dados
-  await page.click(nextButtonSelector);
-  await page.waitForTimeout(timeWait);// Função para executar a busca de dados
+const backButtonSelector = 'button[aria-label="Previous"]';
+await page.waitForSelector(backButtonSelector);
+await page.click(backButtonSelector);
+await page.waitForTimeout(timeWait);// Função para executar a busca de dados
 
+
+for (let i = 0; i < 9; i++) {
+  await page.click(nextButtonSelector);
+
+    await page.waitForTimeout(timeWait);// Função para executar a busca de dados
+}
+
+
+  
   // Captura o conteúdo de todas as divs preenchidas com role="button" e tabindex="-1" dentro de divs com role="rowgroup"
 const flightDetails = await page.evaluate(() => {
     const details = [];
@@ -221,7 +207,7 @@ const flightDetails = await page.evaluate(() => {
   // Suponha que `flightDetails` seja o seu array de objetos com os detalhes dos voos
   const { cheapestDeparture, cheapestReturns } = findCheapestRoundTrip(flightDetails);
   
-  console.log('Dia de ida mais barato:', cheapestDeparture);
+  console.log(cheapestDeparture);
  // console.log('Opções de volta mais baratas:');
  // cheapestReturns.forEach(flight => console.log(flight));
   
@@ -264,7 +250,7 @@ function parseTravelInfo(text) {
 
   return travelInfo;
 }
-async function searchBestDeparture() {
+async function searchBestDeparture(origem) {
   let browser;
   try {
       browser = await puppeteer.launch({ headless: false });
@@ -274,7 +260,7 @@ async function searchBestDeparture() {
       await page.goto(url, { waitUntil: 'networkidle2' });
 
       // Localizar o elemento de entrada pelo valor 'Aracati'
-      const inputSelector = 'input[type="text"][value="Mossoro"]';
+      const inputSelector = 'input[type="text"][value="Aracati"]';
       await page.waitForSelector(inputSelector);
 
       // Clique no input para interagir com ele
@@ -286,7 +272,7 @@ async function searchBestDeparture() {
       await page.keyboard.up('Control');
 
       // Digitar 'REC' para substituir o texto selecionado
-      await page.keyboard.type('REC');
+      await page.keyboard.type(origem);
       await page.waitForTimeout(1000);
 
       await page.keyboard.press('Enter');
