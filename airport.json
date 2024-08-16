@@ -1,0 +1,368 @@
+{
+    "South America": {
+      "Brazil": [
+        {
+          "code": "GRU",
+          "city": "São Paulo",
+          "airport": "São Paulo/Guarulhos International Airport"
+        },
+        {
+          "code": "GIG",
+          "city": "Rio de Janeiro",
+          "airport": "Rio de Janeiro/Galeão International Airport"
+        },
+        {
+          "code": "BSB",
+          "city": "Brasília",
+          "airport": "Brasília International Airport"
+        },
+        {
+          "code": "CGH",
+          "city": "São Paulo",
+          "airport": "São Paulo/Congonhas Airport"
+        },
+        {
+          "code": "SDU",
+          "city": "Rio de Janeiro",
+          "airport": "Rio de Janeiro/Santos Dumont Airport"
+        },
+        {
+          "code": "CWB",
+          "city": "Curitiba",
+          "airport": "Afonso Pena International Airport"
+        },
+        {
+          "code": "POA",
+          "city": "Porto Alegre",
+          "airport": "Salgado Filho International Airport"
+        },
+        {
+          "code": "REC",
+          "city": "Recife",
+          "airport": "Guararapes/Gilberto Freyre International Airport"
+        },
+        {
+          "code": "SSA",
+          "city": "Salvador",
+          "airport": "Deputado Luís Eduardo Magalhães International Airport"
+        },
+        {
+          "code": "FOR",
+          "city": "Fortaleza",
+          "airport": "Pinto Martins International Airport"
+        },
+        {
+          "code": "CNF",
+          "city": "Belo Horizonte",
+          "airport": "Tancredo Neves International Airport"
+        },
+        {
+          "code": "MAO",
+          "city": "Manaus",
+          "airport": "Eduardo Gomes International Airport"
+        },
+        {
+          "code": "VIX",
+          "city": "Vitória",
+          "airport": "Eurico de Aguiar Salles Airport"
+        },
+        {
+          "code": "NAT",
+          "city": "Natal",
+          "airport": "Governador Aluízio Alves International Airport"
+        },
+        {
+          "code": "BEL",
+          "city": "Belém",
+          "airport": "Val-de-Cans/Júlio Cezar Ribeiro International Airport"
+        },
+        {
+          "code": "MCZ",
+          "city": "Maceió",
+          "airport": "Zumbi dos Palmares International Airport"
+        },
+        {
+          "code": "FLN",
+          "city": "Florianópolis",
+          "airport": "Hercílio Luz International Airport"
+        },
+        {
+          "code": "IGU",
+          "city": "Foz do Iguaçu",
+          "airport": "Cataratas International Airport"
+        },
+        {
+          "code": "CGB",
+          "city": "Cuiabá",
+          "airport": "Marechal Rondon International Airport"
+        },
+        {
+          "code": "GYN",
+          "city": "Goiânia",
+          "airport": "Santa Genoveva/Goiânia International Airport"
+        }
+      ],
+      "Argentina": [
+        {
+          "code": "EZE",
+          "city": "Buenos Aires",
+          "airport": "Ministro Pistarini International Airport"
+        },
+        {
+          "code": "AEP",
+          "city": "Buenos Aires",
+          "airport": "Aeroparque Jorge Newbery"
+        }
+      ],
+      "Chile": [
+        {
+          "code": "SCL",
+          "city": "Santiago",
+          "airport": "Arturo Merino Benítez International Airport"
+        }
+      ],
+      "Peru": [
+        {
+          "code": "LIM",
+          "city": "Lima",
+          "airport": "Jorge Chávez International Airport"
+        }
+      ],
+      "Colombia": [
+        {
+          "code": "BOG",
+          "city": "Bogotá",
+          "airport": "El Dorado International Airport"
+        },
+        {
+          "code": "MDE",
+          "city": "Medellín",
+          "airport": "José María Córdova International Airport"
+        }
+      ]
+    },
+    "North America": {
+      "United States": [
+        {
+          "code": "JFK",
+          "city": "New York",
+          "airport": "John F. Kennedy International Airport"
+        },
+        {
+          "code": "LAX",
+          "city": "Los Angeles",
+          "airport": "Los Angeles International Airport"
+        },
+        {
+          "code": "ORD",
+          "city": "Chicago",
+          "airport": "O'Hare International Airport"
+        },
+        {
+          "code": "DFW",
+          "city": "Dallas/Fort Worth",
+          "airport": "Dallas/Fort Worth International Airport"
+        }
+      ],
+      "Canada": [
+        {
+          "code": "YYZ",
+          "city": "Toronto",
+          "airport": "Toronto Pearson International Airport"
+        },
+        {
+          "code": "YVR",
+          "city": "Vancouver",
+          "airport": "Vancouver International Airport"
+        }
+      ],
+      "Mexico": [
+        {
+          "code": "MEX",
+          "city": "Mexico City",
+          "airport": "Mexico City International Airport"
+        },
+        {
+          "code": "CUN",
+          "city": "Cancún",
+          "airport": "Cancún International Airport"
+        }
+      ]
+    },
+    "Europe": {
+      "United Kingdom": [
+        {
+          "code": "LHR",
+          "city": "London",
+          "airport": "Heathrow Airport"
+        },
+        {
+          "code": "LGW",
+          "city": "London",
+          "airport": "Gatwick Airport"
+        }
+      ],
+      "France": [
+        {
+          "code": "CDG",
+          "city": "Paris",
+          "airport": "Charles de Gaulle Airport"
+        },
+        {
+          "code": "ORY",
+          "city": "Paris",
+          "airport": "Orly Airport"
+        }
+      ],
+      "Germany": [
+        {
+          "code": "FRA",
+          "city": "Frankfurt",
+          "airport": "Frankfurt Airport"
+        },
+        {
+          "code": "MUC",
+          "city": "Munich",
+          "airport": "Munich Airport"
+        }
+      ],
+      "Italy": [
+        {
+          "code": "FCO",
+          "city": "Rome",
+          "airport": "Leonardo da Vinci–Fiumicino Airport"
+        },
+        {
+          "code": "MXP",
+          "city": "Milan",
+          "airport": "Milan Malpensa Airport"
+        }
+      ]
+    },
+    "Asia": {
+      "China": [
+        {
+          "code": "PEK",
+          "city": "Beijing",
+          "airport": "Beijing Capital International Airport"
+        },
+        {
+          "code": "PVG",
+          "city": "Shanghai",
+          "airport": "Shanghai Pudong International Airport"
+        }
+      ],
+      "Japan": [
+        {
+          "code": "HND",
+          "city": "Tokyo",
+          "airport": "Haneda Airport"
+        },
+        {
+          "code": "NRT",
+          "city": "Tokyo",
+          "airport": "Narita International Airport"
+        }
+      ],
+      "India": [
+        {
+          "code": "DEL",
+          "city": "New Delhi",
+          "airport": "Indira Gandhi International Airport"
+        },
+        {
+          "code": "BOM",
+          "city": "Mumbai",
+          "airport": "Chhatrapati Shivaji Maharaj International Airport"
+        }
+      ]
+    },
+    "Oceania": {
+      "Australia": [
+        {
+          "code": "SYD",
+          "city": "Sydney",
+          "airport": "Sydney Kingsford Smith International Airport"
+        },
+        {
+          "code": "MEL",
+          "city": "Melbourne",
+          "airport": "Melbourne Airport"
+        }
+      ],
+      "New Zealand": [
+        {
+          "code": "AKL",
+          "city": "Auckland",
+          "airport": "Auckland Airport"
+        },
+        {
+          "code": "CHC",
+          "city": "Christchurch",
+          "airport": "Christchurch Airport"
+        }
+      ]
+    },
+    "Africa": {
+      "South Africa": [
+        {
+          "code": "JNB",
+          "city": "Johannesburg",
+          "airport": "O.R. Tambo International Airport"
+        },
+        {
+          "code": "CPT",
+          "city": "Cape Town",
+          "airport": "Cape Town International Airport"
+        }
+      ],
+      "Egypt": [
+        {
+          "code": "CAI",
+          "city": "Cairo",
+          "airport": "Cairo International Airport"
+        }
+      ],
+      "Nigeria": [
+        {
+          "code": "LOS",
+          "city": "Lagos",
+          "airport": "Murtala Muhammed International Airport"
+        }
+      ]
+    },
+    "Middle East": {
+      "United Arab Emirates": [
+        {
+          "code": "DXB",
+          "city": "Dubai",
+          "airport": "Dubai International Airport"
+        },
+        {
+          "code": "AUH",
+          "city": "Abu Dhabi",
+          "airport": "Abu Dhabi International Airport"
+        }
+      ],
+      "Qatar": [
+        {
+          "code": "DOH",
+          "city": "Doha",
+          "airport": "Hamad International Airport"
+        }
+      ],
+      "Saudi Arabia": [
+        {
+          "code": "RUH",
+          "city": "Riyadh",
+          "airport": "King Khalid International Airport"
+        },
+        {
+          "code": "JED",
+          "city": "Jeddah",
+          "airport": "King Abdulaziz International Airport"
+        }
+      ]
+    }
+  }
+  
